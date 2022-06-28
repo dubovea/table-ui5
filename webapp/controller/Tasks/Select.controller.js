@@ -260,6 +260,7 @@ sap.ui.define(
             sId: `${sMaxId + 1}`,
             sTaskName: "",
             sTaskType: "",
+            sTaskText: "",
             sUserOwner: "",
             dDateBegin: new Date(),
             dDateEnd: null,
