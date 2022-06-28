@@ -176,6 +176,9 @@
                 <Button text="Сохранить"
                     visible='{=!!${view>/editable}}'
                     press="handleSave"/>
+                <Button text="Выгрузить csv файл"
+                    visible='{=!${view>/editable}}'
+                    press="handleExportCSV"/>
                 <Button text="Выгрузить excel файл"
                     visible='{=!${view>/editable}}'
                     press="handleExportExcel"/>

@@ -11,6 +11,8 @@ sap.ui.define(
     "sap/ui/model/Filter",
     "sap/ui/core/util/Export",
     "sap/ui/core/util/ExportTypeCSV",
+    "sap/ui/export/library",
+    "sap/ui/export/Spreadsheet",
   ],
   function (
     BaseController,
@@ -23,9 +25,13 @@ sap.ui.define(
     MessageBox,
     Filter,
     Export,
-    ExportTypeCSV
+    ExportTypeCSV,
+    exportLibrary,
+    Spreadsheet
   ) {
     "use strict";
+
+    const EdmType = exportLibrary.EdmType;
 
     return BaseController.extend("tasklist.controller.Tasks.Select", {
       onInit: function () {
@@ -300,6 +306,60 @@ sap.ui.define(
       },
 
       handleExportExcel: function () {
+        const oTable = this.byId("tableTaskId"),
+          oRowBinding = oTable.getBinding("items"),
+          aCols = [
+            {
+              label: "Название задачи",
+              type: EdmType.String,
+              property: "sTaskName",
+              width: 40,
+              wrap: true,
+            },
+            {
+              label: "Тип задачи",
+              type: EdmType.String,
+              property: "sTaskType",
+              width: 10,
+              wrap: true,
+            },
+            {
+              label: "Ответственный",
+              type: EdmType.String,
+              property: "sUserOwner",
+              width: 40,
+              wrap: true,
+            },
+            {
+              label: "Дата начала",
+              type: EdmType.Date,
+              property: "dDateBegin",
+              width: 10,
+              wrap: true,
+            },
+            {
+              label: "Дата окончания",
+              type: EdmType.Date,
+              property: "dDateEnd",
+              width: 10,
+              wrap: true,
+            },
+          ];
+
+        const oSettings = {
+          workbook: { columns: aCols },
+          dataSource: oRowBinding,
+          fileName: "Задачи на месяц.xlsx",
+          worker: false,
+        };
+
+        const oSheet = new Spreadsheet(oSettings);
+        oSheet.build().finally(function () {
+          oSheet.destroy();
+        });
+      },
+
+      handleExportCSV: function () {
         var oExport = new Export({
           exportType: new ExportTypeCSV({
             separatorChar: ";",
