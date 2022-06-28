@@ -16,6 +16,7 @@ sap.ui.define([], function () {
           sId: o.Id || "",
           sTaskName: o.TaskName || "",
           sTaskType: o.TaskType || "",
+          sTaskText: o.TaskText || "",
           sUserOwner: o.UserOwner || "",
           dDateBegin: o.DateBegin || null,
           dDateEnd: o.DateEnd || null,

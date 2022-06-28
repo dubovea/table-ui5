@@ -106,7 +106,9 @@ sap.ui.define(
       },
 
       __loadList: function () {
-        MessageToast.show("Обновление данных");
+        const sLoadPending = this.i18n("LOAD_PENDING"),
+          sLoadError = this.i18n("LOAD_ERROR");
+        MessageToast.show(sLoadPending);
         this.setBusy();
         this.__ODataUnit
           .getTaskList({ mFilter: this.__getFilters() })
@@ -118,20 +120,20 @@ sap.ui.define(
                   this.__oViewModel.setProperty("/taskList/items", aResult);
                 } catch (oError) {
                   MessageBox.error("DisplayError: " + oError.message, {
-                    title: "Ошибка загрузки списка задач на месяц",
+                    title: sLoadError,
                   });
                 }
               },
               fnError: (oError) => {
                 MessageBox.error("ParseError: " + oError.message, {
-                  title: "Ошибка загрузки списка задач на месяц",
+                  title: sLoadError,
                 });
               },
             });
           })
           .catch((oError) => {
             MessageBox.error("RequestError: " + oError.message, {
-              title: "Ошибка загрузки списка задач на месяц",
+              title: sLoadError,
             });
           })
           .finally(() => {
@@ -157,37 +159,6 @@ sap.ui.define(
         fnSimplePusher("dateEnd", "dDateEnd");
 
         return mFilter;
-      },
-
-      __clearFilters: function (aPaths) {
-        if (!aPaths?.length) {
-          return;
-        }
-        const oFilters = this.__oViewModel.getProperty("/filter");
-        let bFilterContains = false;
-
-        const fnClearValues = (oFilters, sParentPath = "") => {
-          for (const sPath in oFilters) {
-            bFilterContains =
-              !!aPaths.find((sFilterPath) => sFilterPath === sPath) ||
-              !!aPaths.find((sFilterPath) => sFilterPath === sParentPath);
-            if (bFilterContains && typeof oFilters[sPath] === "boolean") {
-              oFilters[sPath] = false;
-            }
-            if (bFilterContains && typeof oFilters[sPath] === "string") {
-              oFilters[sPath] = "";
-            }
-            if (bFilterContains && typeof oFilters[sPath] === "object") {
-              fnClearValues(oFilters[sPath], sPath);
-            }
-            if (bFilterContains && oFilters[sPath] instanceof Date) {
-              oFilters[sPath] = null;
-            }
-          }
-        };
-
-        fnClearValues(oFilters);
-        this.__oViewModel.setProperty("/filter", oFilters);
       },
 
       __activePersoService: function (bEditable) {
@@ -229,6 +200,17 @@ sap.ui.define(
         });
       },
 
+      handleChangeTaskType: function (oEvent) {
+        const oSelectedItem = oEvent.getParameter("selectedItem");
+        if (!oSelectedItem) {
+          return;
+        }
+        const oBinding = oSelectedItem.getBindingContext("view"),
+          { Name } = oBinding.getObject(),
+          sItemPath = oBinding.getPath();
+        this.__oViewModel.setProperty(`${sItemPath}/sTaskText`, Name);
+      },
+
       handleSelectUserConfirm: function (oEvent) {
         const oSelectedItem = oEvent.getParameter("selectedItem");
         if (!oSelectedItem) {
@@ -255,7 +237,8 @@ sap.ui.define(
       handleChangeDate: function (oEvent) {
         const oDP = oEvent.getSource(),
           bValid = oEvent.getParameter("valid"),
-          sErrorMsg = `Введите действительный формат даты ${oDP.getDisplayFormat()}`;
+          sErrorFormatMsg = this.i18n("FORMAT_DATE"),
+          sErrorMsg = `${sErrorFormatMsg} ${oDP.getDisplayFormat()}`;
         oDP.setValueState(bValid ? "None" : "Error");
         oDP.setValueStateText(bValid ? "" : sErrorMsg);
       },
@@ -287,7 +270,7 @@ sap.ui.define(
       handleSave: function () {
         const aTaskList = this.__oViewModel.getProperty("/taskList/items");
         if (BusinessAPI.checkListBeforeSave(aTaskList)) {
-          MessageToast.show("Проверьте корректность введенных данных.");
+          MessageToast.show(this.i18n("SAVE_ERROR"));
           return this.__oViewModel.setProperty("/invalidated", true);
         }
         this.__oViewModel.setProperty("/invalidated", false);
@@ -297,12 +280,13 @@ sap.ui.define(
             Id: o.sId,
             TaskName: o.sTaskName,
             TaskType: o.sTaskType,
+            TaskText: o.sTaskText,
             UserOwner: o.sUserOwner,
             DateBegin: o.dDateBegin,
             DateEnd: o.dDateEnd,
           }))
         );
-        MessageToast.show("Данные успешно сохранены.");
+        MessageToast.show(this.i18n("SAVE_SUCCESS"));
       },
 
       handleExportExcel: function () {
@@ -310,35 +294,35 @@ sap.ui.define(
           oRowBinding = oTable.getBinding("items"),
           aCols = [
             {
-              label: "Название задачи",
+              label: this.i18n("taskNameCol"),
               type: EdmType.String,
               property: "sTaskName",
               width: 40,
               wrap: true,
             },
             {
-              label: "Тип задачи",
+              label: this.i18n("taskTypeCol"),
               type: EdmType.String,
               property: "sTaskType",
               width: 10,
               wrap: true,
             },
             {
-              label: "Ответственный",
+              label: this.i18n("taskUserOwnerCol"),
               type: EdmType.String,
               property: "sUserOwner",
               width: 40,
               wrap: true,
             },
             {
-              label: "Дата начала",
+              label: this.i18n("taskDateBeginCol"),
               type: EdmType.Date,
               property: "dDateBegin",
               width: 10,
               wrap: true,
             },
             {
-              label: "Дата окончания",
+              label: this.i18n("taskDateEndCol"),
               type: EdmType.Date,
               property: "dDateEnd",
               width: 10,
@@ -370,25 +354,25 @@ sap.ui.define(
           },
           columns: [
             {
-              name: "Название задачи",
+              name: this.i18n("taskNameCol"),
               template: {
                 content: "{sTaskName}",
               },
             },
             {
-              name: "Тип задачи",
+              name: this.i18n("taskTypeCol"),
               template: {
                 content: "{sTaskType}",
               },
             },
             {
-              name: "Ответственный",
+              name: this.i18n("taskUserOwnerCol"),
               template: {
                 content: "{sUserOwner}",
               },
             },
             {
-              name: "Дата начала",
+              name: this.i18n("taskDateBeginCol"),
               template: {
                 content: {
                   parts: ["dDateBegin"],
@@ -399,7 +383,7 @@ sap.ui.define(
               },
             },
             {
-              name: "Дата окончания",
+              name: this.i18n("taskDateEndCol"),
               template: {
                 content: {
                   parts: ["dDateEnd"],
@@ -414,10 +398,7 @@ sap.ui.define(
         oExport
           .saveFile()
           .catch((oError) => {
-            MessageBox.error(
-              "Ошибка при загрузке данных. Браузер может не поддерживать данный функционал!\n\n" +
-                oError
-            );
+            MessageBox.error(oError);
           })
           .then(() => {
             oExport.destroy();

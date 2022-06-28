@@ -22,7 +22,7 @@
             <fb:filterGroupItems>
                 <fb:FilterGroupItem groupName="G1"
                     name='G1_01'
-                    label="Тип задачи"
+                    label="{i18n>taskTypeCol}"
                     visibleInFilterBar="true">
                     <fb:control>
                         <Select forceSelection="false"
@@ -35,7 +35,7 @@
                 </fb:FilterGroupItem>
                 <fb:FilterGroupItem groupName="G1"
                     name='G1_02'
-                    label="Отвественный"
+                    label="{i18n>taskUserOwnerCol}"
                     visibleInFilterBar="true">
                     <fb:control>
                         <Input showValueHelp='true'
@@ -51,7 +51,7 @@
 
                 <fb:FilterGroupItem groupName="G1"
                     name='G1_03'
-                    label="Дата постановки задачи"
+                    label="{i18n>taskDateBeginFilter}"
                     visibleInFilterBar="true">
                     <fb:control>
                         <DatePicker dateValue="{view>/filter/dateBegin}"
@@ -61,7 +61,7 @@
                 </fb:FilterGroupItem>
                 <fb:FilterGroupItem groupName="G1"
                     name='G1_04'
-                    label="Дата окончания"
+                    label="{i18n>taskDateEndCol}"
                     visibleInFilterBar="true">
                     <fb:control>
                         <DatePicker dateValue="{view>/filter/dateEnd}"
@@ -80,7 +80,7 @@
             growingThreshold="50">
             <headerToolbar>
                 <OverflowToolbar>
-                    <Title text="Задачи на месяц"
+                    <Title text="{i18n>tableTitle}"
                         level="H2"/>
                     <Button icon="sap-icon://action-settings"
                         visible='{=!${view>/editable}}'
@@ -92,19 +92,19 @@
             </headerToolbar>
             <columns>
                 <Column id="taskNameColId">
-                    <Text text='Название задачи' />
+                    <Text text='{i18n>taskNameCol}' />
                 </Column>
                 <Column id="taskTypeColId">
-                    <Text text='Тип задачи' />
+                    <Text text='{i18n>taskTypeCol}' />
                 </Column>
                 <Column id="taskUserOwnerColId">
-                    <Text text='Ответственный' />
+                    <Text text='{i18n>taskUserOwnerCol}' />
                 </Column>
                 <Column id="taskDateBeginColId">
-                    <Text text='Дата начала' />
+                    <Text text='{i18n>taskDateBeginCol}' />
                 </Column>
                 <Column id="taskDateEndColId">
-                    <Text text='Дата окончания' />
+                    <Text text='{i18n>taskDateEndCol}' />
                 </Column>
             </columns>
 
@@ -120,6 +120,7 @@
                         </VBox>
                         <VBox>
                             <Select visible='{=!!${view>/editable}}'
+                                change='handleChangeTaskType'
                                 forceSelection="false"
                                 selectedKey='{view>sTaskType}'
                                 valueState="{parts: [{path: 'view>sTaskType'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueState'}"
@@ -131,7 +132,7 @@
                                     text='{view>Name}'/>
                             </Select>
                             <Text visible='{=!${view>/editable}}'
-                                text='{view>sTaskType}'/>
+                                text='{view>sTaskText}'/>
                         </VBox>
                         <VBox>
                             <Input visible='{=!!${view>/editable}}'
@@ -170,16 +171,16 @@
         <footer>
             <OverflowToolbar >
                 <ToolbarSpacer />
-                <Button text="Редактировать"
+                <Button text="{i18n>buttonEdit}"
                     visible='{=!${view>/editable}}'
                     press="handleEditPage"/>
-                <Button text="Сохранить"
+                <Button text="{i18n>buttonSave}"
                     visible='{=!!${view>/editable}}'
                     press="handleSave"/>
-                <Button text="Выгрузить csv файл"
+                <Button text="{i18n>buttonExportCSV}"
                     visible='{=!${view>/editable}}'
                     press="handleExportCSV"/>
-                <Button text="Выгрузить excel файл"
+                <Button text="{i18n>buttonExportExcel}"
                     visible='{=!${view>/editable}}'
                     press="handleExportExcel"/>
             </OverflowToolbar>

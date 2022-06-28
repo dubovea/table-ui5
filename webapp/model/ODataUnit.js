@@ -31,7 +31,7 @@ sap.ui.define(["sap/ui/base/Object"], function (SAPObject) {
     /**
      * Запрос списка задач на месяц
      * @param {Object} oParams параметры выполнения
-     * @param {Map} oParams.mFilter фильтры, поля будут описаны позже
+     * @param {Map} oParams.mFilter фильтры
      * @returns {Promise} с передачей массива записей
      */
     getTaskList: function (oParams) {
@@ -42,6 +42,7 @@ sap.ui.define(["sap/ui/base/Object"], function (SAPObject) {
               Id: "1",
               TaskName: "Разработка тестового приложения",
               TaskType: "",
+              TaskText: "",
               UserOwner: "",
               DateBegin: null,
               DateEnd: null,
@@ -50,6 +51,7 @@ sap.ui.define(["sap/ui/base/Object"], function (SAPObject) {
               Id: "2",
               TaskName: "Тестирование приложения",
               TaskType: "",
+              TaskText: "",
               UserOwner: "",
               DateBegin: null,
               DateEnd: null,
@@ -58,6 +60,7 @@ sap.ui.define(["sap/ui/base/Object"], function (SAPObject) {
               Id: "3",
               TaskName: "Тестирование приложения #2",
               TaskType: "",
+              TaskText: "",
               UserOwner: "",
               DateBegin: null,
               DateEnd: null,
