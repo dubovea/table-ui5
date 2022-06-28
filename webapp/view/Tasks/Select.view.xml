@@ -1,0 +1,185 @@
+<mvc:View controllerName="tasklist.controller.Tasks.Select"
+    height="100%"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core='sap.ui.core'
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:f="sap.f">
+
+    <Page id="taskPageId"
+        showHeader="false"
+        busy='{view>/busy}'>
+        <fb:FilterBar id="taskListFilterBar"
+            blocked='{=!!${view>/editable}}'
+            useToolbar="false"
+            filterContainerWidth="15rem"
+            showFilterConfiguration='false'
+            showClearOnFB="true"
+            showRestoreOnFB="true"
+            clear='handleClearFilters'
+            reset='handleResetFilters'
+            search="handleSearch">
+            <fb:filterGroupItems>
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_01'
+                    label="Тип задачи"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <Select forceSelection="false"
+                            selectedKey='{view>/filter/taskTypes/selectedKey}'
+                            items='{view>/filter/taskTypes/items}'>
+                            <core:ListItem key='{view>Id}'
+                                text='{view>Name}'/>
+                        </Select>
+                    </fb:control>
+                </fb:FilterGroupItem>
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_02'
+                    label="Отвественный"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <Input showValueHelp='true'
+                            valueHelpOnly='false'
+                            valueHelpRequest='handleOpenUserVH'
+                            showSuggestion="true"
+                            submit='handleSubmitPlant'
+                            value='{view>/filter/users/value}'
+                            valueState='{= ${view>/filter/users/error} === "" ? "None" : "Error" }'
+                            valueStateText='{view>/filter/users/error}'/>
+                    </fb:control>
+                </fb:FilterGroupItem>
+
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_03'
+                    label="Дата постановки задачи"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <DatePicker dateValue="{view>/filter/dateBegin}"
+                            change='handleChangeDate'
+                            displayFormat="dd.MM.yyyy" />
+                    </fb:control>
+                </fb:FilterGroupItem>
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_04'
+                    label="Дата окончания"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <DatePicker dateValue="{view>/filter/dateEnd}"
+                            change='handleChangeDate'
+                            displayFormat="dd.MM.yyyy" />
+                    </fb:control>
+                </fb:FilterGroupItem>
+            </fb:filterGroupItems>
+        </fb:FilterBar>
+
+        <Table sticky="HeaderToolbar,InfoToolbar,ColumnHeaders"
+            id='tableTaskId'
+            items='{view>/taskList/items}'
+            growing='true'
+            mode='None'
+            growingThreshold="50">
+            <headerToolbar>
+                <OverflowToolbar>
+                    <Title text="Задачи на месяц"
+                        level="H2"/>
+                    <Button icon="sap-icon://action-settings"
+                        visible='{=!${view>/editable}}'
+                        press="handlePersoTable"/>
+                    <Button icon="sap-icon://add"
+                        visible='{=!!${view>/editable}}'
+                        press="handleAddItem"/>
+                </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+                <Column id="taskNameColId">
+                    <Text text='Название задачи' />
+                </Column>
+                <Column id="taskTypeColId">
+                    <Text text='Тип задачи' />
+                </Column>
+                <Column id="taskUserOwnerColId">
+                    <Text text='Ответственный' />
+                </Column>
+                <Column id="taskDateBeginColId">
+                    <Text text='Дата начала' />
+                </Column>
+                <Column id="taskDateEndColId">
+                    <Text text='Дата окончания' />
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <VBox>
+                            <Input visible='{=!!${view>/editable}}'
+                                value='{view>sTaskName}'
+                                valueState="{parts: [{path: 'view>sTaskName'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueState'}"/>
+                            <Text visible='{=!${view>/editable}}'
+                                text='{view>sTaskName}'/>
+                        </VBox>
+                        <VBox>
+                            <Select visible='{=!!${view>/editable}}'
+                                forceSelection="false"
+                                selectedKey='{view>sTaskType}'
+                                valueState="{parts: [{path: 'view>sTaskType'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueState'}"
+                                items="{
+                                  path: 'view>/filter/taskTypes/items',
+                                  templateShareable: false
+                                }">
+                                <core:ListItem key='{view>Id}'
+                                    text='{view>Name}'/>
+                            </Select>
+                            <Text visible='{=!${view>/editable}}'
+                                text='{view>sTaskType}'/>
+                        </VBox>
+                        <VBox>
+                            <Input visible='{=!!${view>/editable}}'
+                                showValueHelp='true'
+                                valueHelpOnly='false'
+                                valueHelpRequest='handleOpenUserVH'
+                                showSuggestion="true"
+                                submit='handleSubmitPlant'
+                                value='{view>sUserOwner}'
+                                valueState="{parts: [{path: 'view>sUserOwner'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueState'}"/>
+                            <Text visible='{=!${view>/editable}}'
+                                text='{view>sUserOwner}'/>
+                        </VBox>
+                        <VBox>
+                            <DatePicker visible='{=!!${view>/editable}}'
+                                dateValue="{view>dDateBegin}"
+                                valueState="{parts: [{path: 'view>dDateBegin'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueState'}"
+                                change='handleChangeDate'
+                                displayFormat="dd.MM.yyyy" />
+                            <Text visible='{=!${view>/editable}}'
+                                text='{ path: "view>dDateBegin", type: "sap.ui.model.type.Date", formatOptions: { pattern: "dd.MM.yyyy"} }'/>
+                        </VBox>
+                        <VBox>
+                            <DatePicker visible='{=!!${view>/editable}}'
+                                dateValue="{view>dDateEnd}"
+                                valueState="{parts: [{path: 'view>dDateBegin'}, {path: 'view>dDateEnd'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueStateDateEnd'}"
+                                change='handleChangeDate'
+                                displayFormat="dd.MM.yyyy" />
+                            <Text visible='{=!${view>/editable}}'
+                                text='{ path: "view>dDateEnd", type: "sap.ui.model.type.Date", formatOptions: { pattern: "dd.MM.yyyy"} }'/>
+                        </VBox>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        <footer>
+            <OverflowToolbar >
+                <ToolbarSpacer />
+                <Button text="Редактировать"
+                    visible='{=!${view>/editable}}'
+                    press="handleEditPage"/>
+                <Button text="Сохранить"
+                    visible='{=!!${view>/editable}}'
+                    press="handleSave"/>
+                <Button text="Выгрузить excel файл"
+                    visible='{=!${view>/editable}}'
+                    press="onOrder"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

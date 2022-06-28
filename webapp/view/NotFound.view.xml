@@ -1,0 +1,9 @@
+<mvc:View
+    controllerName='tasklist.controller.NotFound'
+    xmlns:u='sap.ui.unified'
+    xmlns:mvc='sap.ui.core.mvc'
+    xmlns='sap.m'>
+    <Page id='app' title='404'>
+        <Text text='Not found' />
+    </Page>
+</mvc:View>

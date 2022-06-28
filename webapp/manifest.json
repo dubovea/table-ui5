@@ -1,0 +1,93 @@
+{
+	"sap.app": {
+		"title": "Тестовое задание",
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"id": "tasklist",
+		"type": "application"
+	},
+	"sap.ui": {
+		"deviceTypes": {
+			"desktop": true,
+			"phone": false,
+			"tablet": false
+		},
+		"technology": "UI5",
+		"fullWidth": true
+	},
+	"sap.ui5": {
+		"contentDensities": {
+			"compact": false,
+			"cozy": true
+		},
+		"dependencies": {
+			"minUI5Version": "1.60.30",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.table": {}
+			}
+		},
+		"rootView": {
+			"viewName": "tasklist.view.App",
+			"type": "XML",
+			"async": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "tasklist.i18n.i18n"
+				}
+			},
+			"data": {
+				"type": "sap.ui.model.json.JSONModel"
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/styles.css"
+				}
+			],
+			"js": []
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "tasklist.view",
+				"controlId": "app",
+				"bypassed": {
+					"target": [
+						"notFound"
+					]
+				},
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "task/:editable:",
+					"name": "taskSelect",
+					"target": [
+						"taskSelect"
+					]
+				}
+			],
+			"targets": {
+				"notFound": {
+					"viewName": "NotFound",
+					"viewLevel": 1,
+					"controlAggregation": "pages"
+				},
+				"taskSelect": {
+					"viewType": "XML",
+					"viewName": "Tasks.Select",
+					"viewLevel": 1,
+					"controlAggregation": "pages"
+				}
+			}
+		}
+	}
+}
