@@ -178,7 +178,7 @@
                     press="handleSave"/>
                 <Button text="Выгрузить excel файл"
                     visible='{=!${view>/editable}}'
-                    press="onOrder"/>
+                    press="handleExportExcel"/>
             </OverflowToolbar>
         </footer>
     </Page>

@@ -9,6 +9,8 @@ sap.ui.define(
     "sap/m/MessageToast",
     "sap/m/MessageBox",
     "sap/ui/model/Filter",
+    "sap/ui/core/util/Export",
+    "sap/ui/core/util/ExportTypeCSV",
   ],
   function (
     BaseController,
@@ -19,7 +21,9 @@ sap.ui.define(
     JSONModel,
     MessageToast,
     MessageBox,
-    Filter
+    Filter,
+    Export,
+    ExportTypeCSV
   ) {
     "use strict";
 
@@ -293,6 +297,71 @@ sap.ui.define(
           }))
         );
         MessageToast.show("Данные успешно сохранены.");
+      },
+
+      handleExportExcel: function () {
+        var oExport = new Export({
+          exportType: new ExportTypeCSV({
+            separatorChar: ";",
+          }),
+          models: this.__oViewModel,
+          rows: {
+            path: "/taskList/items",
+          },
+          columns: [
+            {
+              name: "Название задачи",
+              template: {
+                content: "{sTaskName}",
+              },
+            },
+            {
+              name: "Тип задачи",
+              template: {
+                content: "{sTaskType}",
+              },
+            },
+            {
+              name: "Ответственный",
+              template: {
+                content: "{sUserOwner}",
+              },
+            },
+            {
+              name: "Дата начала",
+              template: {
+                content: {
+                  parts: ["dDateBegin"],
+                  formatter: (dDateBegin) => {
+                    return dDateBegin?.toLocaleDateString();
+                  },
+                },
+              },
+            },
+            {
+              name: "Дата окончания",
+              template: {
+                content: {
+                  parts: ["dDateEnd"],
+                  formatter: (dDateEnd) => {
+                    return dDateEnd?.toLocaleDateString();
+                  },
+                },
+              },
+            },
+          ],
+        });
+        oExport
+          .saveFile()
+          .catch((oError) => {
+            MessageBox.error(
+              "Ошибка при загрузке данных. Браузер может не поддерживать данный функционал!\n\n" +
+                oError
+            );
+          })
+          .then(() => {
+            oExport.destroy();
+          });
       },
 
       handleEditPage: function () {
