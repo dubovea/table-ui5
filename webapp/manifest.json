@@ -41,8 +41,57 @@
 					"bundleName": "tasklist.i18n.i18n"
 				}
 			},
-			"data": {
-				"type": "sap.ui.model.json.JSONModel"
+			"state": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {
+					"busy": true,
+					"editable": false,
+					"invalidated": false,
+					"taskList": {
+						"items": [],
+						"busy": false
+					},
+					"filter": {
+						"taskTypes": {
+							"selectedKey": "",
+							"items": [
+								{
+									"Id": "1",
+									"Name": "Разработка"
+								},
+								{
+									"Id": "2",
+									"Name": "Тестирование"
+								},
+								{
+									"Id": "3",
+									"Name": "Проектирование"
+								}
+							]
+						},
+						"users": {
+							"id": "",
+							"value": "",
+							"error": "",
+							"items": [
+								{
+									"Id": "1",
+									"Name": "Дубов Эдуард Александрович"
+								},
+								{
+									"Id": "2",
+									"Name": "Манин Михаил Александрович"
+								},
+								{
+									"Id": "3",
+									"Name": "Манин Александр Михайлович"
+								}
+							]
+						},
+						"dateBegin": null,
+						"dateEnd": null
+					}
+				}
 			}
 		},
 		"resources": {
@@ -68,10 +117,24 @@
 			},
 			"routes": [
 				{
-					"pattern": "task/:editable:",
+					"pattern": ":editable:",
 					"name": "taskSelect",
 					"target": [
 						"taskSelect"
+					]
+				},
+				{
+					"pattern": "task/view",
+					"name": "taskView",
+					"target": [
+						"taskView"
+					]
+				},
+				{
+					"pattern": "task/edit",
+					"name": "taskEdit",
+					"target": [
+						"taskEdit"
 					]
 				}
 			],
@@ -84,6 +147,18 @@
 				"taskSelect": {
 					"viewType": "XML",
 					"viewName": "Tasks.Select",
+					"viewLevel": 1,
+					"controlAggregation": "pages"
+				},
+				"taskView": {
+					"viewType": "XML",
+					"viewName": "Tasks.Overview",
+					"viewLevel": 1,
+					"controlAggregation": "pages"
+				},
+				"taskEdit": {
+					"viewType": "XML",
+					"viewName": "Tasks.Editing",
 					"viewLevel": 1,
 					"controlAggregation": "pages"
 				}

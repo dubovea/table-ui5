@@ -1,0 +1,142 @@
+<mvc:View controllerName="tasklist.controller.Tasks.Editing"
+    height="100%"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core='sap.ui.core'
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:f="sap.f">
+
+    <Page id="taskPageId"
+        showHeader="false"
+        busy='{state>/busy}'>
+        <fb:FilterBar id="taskListFilterBar"
+            blocked='true'
+            useToolbar="false"
+            filterContainerWidth="15rem"
+            showFilterConfiguration='false'
+            showClearOnFB="true"
+            showRestoreOnFB="true">
+            <fb:filterGroupItems>
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_01'
+                    label="{i18n>taskTypeCol}"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <Select forceSelection="false"
+                            selectedKey='{state>/filter/taskTypes/selectedKey}'
+                            items='{state>/filter/taskTypes/items}'>
+                            <core:ListItem key='{state>Id}'
+                                text='{state>Name}'/>
+                        </Select>
+                    </fb:control>
+                </fb:FilterGroupItem>
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_02'
+                    label="{i18n>taskUserOwnerCol}"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <Input showValueHelp='true'
+                            valueHelpOnly='false'
+                            showSuggestion="true"
+                            value='{state>/filter/users/value}'
+                            valueState='{= ${state>/filter/users/error} === "" ? "None" : "Error" }'
+                            valueStateText='{state>/filter/users/error}'/>
+                    </fb:control>
+                </fb:FilterGroupItem>
+
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_03'
+                    label="{i18n>taskDateBeginFilter}"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <DatePicker dateValue="{state>/filter/dateBegin}"
+                            displayFormat="dd.MM.yyyy" />
+                    </fb:control>
+                </fb:FilterGroupItem>
+                <fb:FilterGroupItem groupName="G1"
+                    name='G1_04'
+                    label="{i18n>taskDateEndCol}"
+                    visibleInFilterBar="true">
+                    <fb:control>
+                        <DatePicker dateValue="{state>/filter/dateEnd}"
+                            displayFormat="dd.MM.yyyy" />
+                    </fb:control>
+                </fb:FilterGroupItem>
+            </fb:filterGroupItems>
+        </fb:FilterBar>
+
+        <Table sticky="HeaderToolbar,InfoToolbar,ColumnHeaders"
+            id='tableTaskId'
+            items='{state>/taskList/items}'
+            growing='true'
+            mode='None'
+            growingThreshold="50">
+            <headerToolbar>
+                <OverflowToolbar>
+                    <Title text="{i18n>tableTitle}"
+                        level="H2"/>
+                    <Button icon="sap-icon://add"
+                        press="handleAddItem"/>
+                </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+                <Column id="taskNameColId">
+                    <Text text='{i18n>taskNameCol}' />
+                </Column>
+                <Column id="taskTypeColId">
+                    <Text text='{i18n>taskTypeCol}' />
+                </Column>
+                <Column id="taskUserOwnerColId">
+                    <Text text='{i18n>taskUserOwnerCol}' />
+                </Column>
+                <Column id="taskDateBeginColId">
+                    <Text text='{i18n>taskDateBeginCol}' />
+                </Column>
+                <Column id="taskDateEndColId">
+                    <Text text='{i18n>taskDateEndCol}' />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input value='{state>sTaskName}'
+                            valueState="{parts: [{path: 'state>sTaskName'}, {path: 'state>/invalidated'}], formatter: '.formatter.formatValueState'}"/>
+                        <Select change='handleChangeTaskType'
+                            forceSelection="false"
+                            selectedKey='{state>sTaskType}'
+                            valueState="{parts: [{path: 'state>sTaskType'}, {path: 'state>/invalidated'}], formatter: '.formatter.formatValueState'}"
+                            items="{
+                                  path: 'state>/filter/taskTypes/items',
+                                  templateShareable: false
+                                }">
+                            <core:ListItem key='{state>Id}'
+                                text='{state>Name}'/>
+                        </Select>
+                        <Input showValueHelp='true'
+                            valueHelpOnly='false'
+                            valueHelpRequest='handleOpenUserVH'
+                            showSuggestion="true"
+                            submit='handleSubmitPlant'
+                            value='{state>sUserOwner}'
+                            valueState="{parts: [{path: 'state>sUserOwner'}, {path: 'state>/invalidated'}], formatter: '.formatter.formatValueState'}"/>
+                        <DatePicker dateValue="{state>dDateBegin}"
+                            valueState="{parts: [{path: 'state>dDateBegin'}, {path: 'state>/invalidated'}], formatter: '.formatter.formatValueState'}"
+                            change='handleChangeDate'
+                            displayFormat="dd.MM.yyyy" />
+                        <DatePicker dateValue="{state>dDateEnd}"
+                            valueState="{parts: [{path: 'state>dDateBegin'}, {path: 'state>dDateEnd'}, {path: 'state>/invalidated'}], formatter: '.formatter.formatValueStateDateEnd'}"
+                            change='handleChangeDate'
+                            displayFormat="dd.MM.yyyy" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        <footer>
+            <OverflowToolbar >
+                <ToolbarSpacer />
+                <Button text="{i18n>buttonSave}"
+                    press="handleSave"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

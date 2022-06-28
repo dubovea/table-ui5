@@ -1,0 +1,12 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog id="selectUserDialogId"
+		noDataText="Ответственные лица не найдены"
+		title="Выберите ответственное лицо"
+		search=".handleSelectUserSearch"
+		confirm=".handleSelectUserConfirm"
+		cancel=".handleSelectUserConfirm"
+		items="{state>/filter/users/items}">
+		<StandardListItem title="{state>Name}" />
+	</SelectDialog>
+</core:FragmentDefinition>

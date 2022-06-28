@@ -42,7 +42,6 @@
                             valueHelpOnly='false'
                             valueHelpRequest='handleOpenUserVH'
                             showSuggestion="true"
-                            submit='handleSubmitPlant'
                             value='{view>/filter/users/value}'
                             valueState='{= ${view>/filter/users/error} === "" ? "None" : "Error" }'
                             valueStateText='{view>/filter/users/error}'/>
@@ -140,7 +139,6 @@
                                 valueHelpOnly='false'
                                 valueHelpRequest='handleOpenUserVH'
                                 showSuggestion="true"
-                                submit='handleSubmitPlant'
                                 value='{view>sUserOwner}'
                                 valueState="{parts: [{path: 'view>sUserOwner'}, {path: 'view>/invalidated'}], formatter: '.formatter.formatValueState'}"/>
                             <Text visible='{=!${view>/editable}}'
