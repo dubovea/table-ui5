@@ -207,7 +207,7 @@ sap.ui.define(
         }
         const oBinding = oSelectedItem.getBindingContext("view"),
           { Name } = oBinding.getObject(),
-          sItemPath = oBinding.getPath();
+          sItemPath = oEvent.getSource().getBindingContext("view").getPath();
         this.__oViewModel.setProperty(`${sItemPath}/sTaskText`, Name);
       },
 
