@@ -6,7 +6,6 @@ dist/
 .DS_Store
 .vscode/
 webapp/localService/mockdata/
-ui5.yaml
 
 logs
 *.log

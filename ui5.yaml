@@ -1,0 +1,13 @@
+specVersion: "2.6"
+metadata:
+  name: table.ui5
+type: application
+framework:
+  name: SAPUI5
+  version: "1.103.0"
+  libraries:
+    - name: sap.ui.core
+    - name: sap.m
+    - name: sap.f
+    - name: sap.ui.table
+    - name: themelib_sap_belize
